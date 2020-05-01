@@ -29,7 +29,7 @@
             document.body.appendChild(renderer.domElement);
 
             var theModel;
-const MODEL_PATH =  "https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/chair.glb";
+            const MODEL_PATH =  "chair.glb";
 
             function animate() {
                 renderer.render(scene, camera);
@@ -42,6 +42,24 @@ const MODEL_PATH =  "https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/chair.
             camera.position.x = 0;
 
             animate();
+
+            // Init the object loader
+var loader = new THREE.GLTFLoader();
+loader.load(MODEL_PATH, function(gltf) {
+  theModel = gltf.scene;
+
+// Set the models initial scale   
+  theModel.scale.set(2,2,2);
+
+  // Offset the y position a bit
+  theModel.position.y = -1;
+
+  // Add the model to the scene
+  scene.add(theModel);
+
+}, undefined, function(error) {
+  console.error(error)
+});
 
 </script>        
     
