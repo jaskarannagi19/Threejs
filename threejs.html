@@ -19,7 +19,9 @@
 
 
 <script>
-			const scene = new THREE.Scene();
+    const BACKGROUND_COLOR = 0xf1f1f1;
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(BACKGROUND_COLOR );
             const canvas = document.querySelector('#c');
             const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
             var cameraFar = 5;
