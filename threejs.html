@@ -4,16 +4,59 @@
   body {
     margin: 0px;
   }
+
+  .controls {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+
+.tray {
+    width: 100%;
+    height: 50px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.tray__slide {
+    position: absolute;
+    display: flex;
+    left: 0;
+    /*   transform: translateX(-50%);
+  animation: wheelin 1s 2s ease-in-out forwards; */
+}
+
+.tray__swatch {
+    transition: 0.1s ease-in;
+    height: 50px;
+    min-width: 50px;
+    flex: 1;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    background-size: cover;
+    background-position: center;
+}
+
+.tray__swatch:nth-child(5n+5) {
+    margin-right: 20px;
+}
+
 </style>
 
 <body>
+  
+  
   <canvas id="c" style="width: 100%;"></canvas>
+
+
+
   <div class="controls">
-    <!-- This tray will be filled with colors via JS, and the ability to slide this panel will be added in with a lightweight slider script (no dependency used for this) -->
-    <div id="js-tray" class="tray">
-      <div id="js-tray-slide" class="tray__slide"></div>
-    </div>
+      <!-- This tray will be filled with colors via JS, and the ability to slide this panel will be added in with a lightweight slider script (no dependency used for this) -->
+       <div id="js-tray" class="tray">
+           <div id="js-tray-slide" class="tray__slide"></div>
+       </div>
   </div>
+ 
 
 
   <!-- The main three.js file -->
@@ -43,9 +86,7 @@
       }
     ]
 
-
-
-
+    const TRAY = document.getElementById('js-tray-slide');
 
     const BACKGROUND_COLOR = 0xf1f1f1;
     const scene = new THREE.Scene();
@@ -61,13 +102,7 @@
     var theModel;
     const MODEL_PATH = "chair.glb";
 
-    const TRAY = document.getElementById('js-tray-slide');
-
-
-
-
-
-
+    
 
 
     function animate() {
@@ -200,19 +235,17 @@
 
 
     // Function - Build Colors
-function buildColors(colors) {
-  for (let [i, color] of colors.entries()) {
-    let swatch = document.createElement('div');
-    swatch.classList.add('tray__swatch');
+    function buildColors(colors) {
+      for (let [i, color] of colors.entries()) {
+        let swatch = document.createElement('div');
+        swatch.classList.add('tray__swatch');
+        swatch.style.background = "#" + color.color;
+        swatch.setAttribute('data-key', i);
+        TRAY.append(swatch);
+      }
+    }
 
-      swatch.style.background = "#" + color.color;
-
-    swatch.setAttribute('data-key', i);
-    TRAY.append(swatch);
-  }
-}
-
-buildColors(colors);
+    buildColors(colors);
 
   </script>
 
