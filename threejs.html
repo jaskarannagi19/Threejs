@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <style>
+    body{
+        margin: 0px;
+    }
+    </style>
+	
+	<body>
+            <canvas id="c" style="width: 100%;"></canvas>
+
+
+            <!-- The main three.js file -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/108/three.min.js'></script>
+<!-- This brings in the ability to load custom 3D objects in the .gltf file format. Blender allows the ability to export to this format out the box -->
+<script src='https://cdn.jsdelivr.net/gh/mrdoob/three.js@r92/examples/js/loaders/GLTFLoader.js'></script>
+<!-- This is a simple to use extension for three.js that activates all the rotating, dragging and zooming controls we need for both mouse and touch, there isn't a clear CDN for this that I can find -->
+<script src='https://threejs.org/examples/js/controls/OrbitControls.js'></script>
+
+
+<script>
+			const scene = new THREE.Scene();
+            const canvas = document.querySelector('#c');
+            const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
+            var cameraFar = 5;
+            document.body.appendChild(renderer.domElement);
+
+            function animate() {
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            }
+
+            // Add a camera
+            var camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = cameraFar;
+            camera.position.x = 0;
+
+            animate();
+
+</script>        
+    
+
+</body>
+</html>
+
