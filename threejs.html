@@ -334,22 +334,32 @@ html {
 
   <script>
     const colors = [
-      {
-        color: '66533C'
-      },
-      {
-        color: '173A2F'
-      },
-      {
-        color: '153944'
-      },
-      {
-        color: '27548D'
-      },
-      {
-        color: '438AAC'
-      }
-    ]
+{
+    texture: 'images/wood.jpg',
+    size: [2,2,2],
+    shininess: 60
+},
+{
+    texture: 'images/wood.jpg',
+    size: [3, 3, 3],
+    shininess: 0
+},
+{
+    color: '66533C'
+},
+{
+    color: '173A2F'
+},
+{
+    color: '153944'
+},
+{
+    color: '27548D'
+},
+{
+    color: '438AAC'
+}  
+]
 
     var activeOption = 'legs';
 
@@ -503,16 +513,54 @@ html {
 
     // Function - Build Colors
     function buildColors(colors) {
-      for (let [i, color] of colors.entries()) {
-        let swatch = document.createElement('div');
-        swatch.classList.add('tray__swatch');
-        swatch.style.background = "#" + color.color;
-        swatch.setAttribute('data-key', i);
-        TRAY.append(swatch);
-      }
+  for (let [i, color] of colors.entries()) {
+    let swatch = document.createElement('div');
+    swatch.classList.add('tray__swatch');
+    
+    if (color.texture)
+    {
+      swatch.style.backgroundImage = "url(" + color.texture + ")";   
+    } else
+    {
+      swatch.style.background = "#" + color.color;
     }
 
+    swatch.setAttribute('data-key', i);
+    TRAY.append(swatch);
+  }
+}
+
     buildColors(colors);
+
+
+
+
+    // Select Option
+const options = document.querySelectorAll(".option");
+
+for (const option of options) {
+  option.addEventListener('click',selectOption);
+}
+
+function selectOption(e) {
+  let option = e.target;
+  activeOption = e.target.dataset.option;
+  for (const otherOption of options) {
+    otherOption.classList.remove('--is-active');
+  }
+  option.classList.add('--is-active');
+}
+
+
+
+
+
+
+
+
+
+
+
 
     const swatches = document.querySelectorAll(".tray__swatch");
 
@@ -524,13 +572,29 @@ function selectSwatch(e) {
      let color = colors[parseInt(e.target.dataset.key)];
      let new_mtl;
 
+    if (color.texture) {
+      
+      let txt = new THREE.TextureLoader().load(color.texture);
+      
+      txt.repeat.set( color.size[0], color.size[1], color.size[2]);
+      txt.wrapS = THREE.RepeatWrapping;
+      txt.wrapT = THREE.RepeatWrapping;
+      
+      new_mtl = new THREE.MeshPhongMaterial( {
+        map: txt,
+        shininess: color.shininess ? color.shininess : 10
+      });    
+    } 
+    else
+    {
       new_mtl = new THREE.MeshPhongMaterial({
           color: parseInt('0x' + color.color),
           shininess: color.shininess ? color.shininess : 10
           
         });
+    }
     
-    setMaterial(theModel, 'legs', new_mtl);
+    setMaterial(theModel, activeOption, new_mtl);
 }
 function setMaterial(parent, type, mtl) {
   parent.traverse((o) => {
